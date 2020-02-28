@@ -4,8 +4,6 @@
 #include <thread>
 #include <chrono>
 
-
-///BUG MAXLIMIT OF 20 FIX THAT
 using namespace std;
 
 class Player
@@ -20,7 +18,7 @@ class Player
     
         Player()
         {
-            this->dollars = 30;
+            this->dollars = 100;
             this->points = 0;
             this->maxBetLimit = 2;
             this->playerName = "";
