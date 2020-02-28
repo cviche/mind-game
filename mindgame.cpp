@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <thread>
+#include <chrono>
 
 
 ///BUG MAXLIMIT OF 20 FIX THAT
@@ -79,57 +81,59 @@ int main()
 	cout << "Enter Player 1's Name: \n";
 	cin >> p1;
     players.push_back(new Player(30, p1)); // Player 1
+    std::this_thread::sleep_for (std::chrono::seconds(1));
 	
 	cout << "Enter Player 2's Name: \n";
 	cin >> p2;
     players.push_back(new Player(30, p2)); //Player 2;
+    std::this_thread::sleep_for (std::chrono::seconds(1));
 	
 	cout << "Enter Player 3's Name: \n";
 	cin >> p3;
     players.push_back(new Player(30, p3)); //Player 3
-  
-    cout << players.size();
-    for(int i = 0; i < (long signed int)players.size(); i++)
-    {
-        cout << players[i]->playerName + "\n";// + "\n";
-    }
+    std::this_thread::sleep_for (std::chrono::seconds(1));
 
     cout << "We are now starting the game. Get ready to bet!\n";
+    //std::this_thread::sleep_for (std::chrono::seconds(1));
 	while(!gameEnd)
 	{
-        cout <<"TOP NO SEG\n";
         int currWinner = 0;
         for(int i = 0; i < players.size(); i++)
         {
             if(players[i]->dollars > 0)
             {
+              std::this_thread::sleep_for (std::chrono::seconds(1));
               cout << players[i]->playerName +", place the amount of dollars you would like to bet this round\n";
               cin >> players[i]->currentBetAmount; 
               properInput(players, i);
+              std::this_thread::sleep_for (std::chrono::seconds(1));
             }
             else
             {
                 players[i]->inGame = false;
+                players[i]->currentBetAmount = 0;
             }
         }    
         
         int roundWinner = checkWinnerAndUpdate(players);
+        std::this_thread::sleep_for (std::chrono::seconds(1));
         cout << "The winner of this round is: " +players[roundWinner]->playerName + "\n";
+        std::this_thread::sleep_for (std::chrono::seconds(1));
         
         printState(players);
-        //cout <<"OHHHH THE SEG FAULT IS BEFORE GAMEOVER\n";
         gameEnd = isGameOver(players); 
         if(gameEnd == true)
         {
             int finalWinner = 0;
             for(int i = 0; i < players.size(); i++)
             {
+                players[i]->points += players[i]->dollars;
+                players[i]->dollars -= players[i]->dollars;
                 if(players[finalWinner]->points < players[i]->points) finalWinner = i;
             }
-            cout <<"The winner of this whole game is" + players[finalWinner]->playerName;
+            cout <<"The winner of this whole game is " + players[finalWinner]->playerName + "\n";
             break;
         }
-        cout <<"NO SEGFALUT HERE AT THE BOTTOM\n";
 	}
 }
 
@@ -159,7 +163,6 @@ void printState(vector<Player*> players)
           cout <<"Points: " + to_string(players[i]->points) + "\n";
           cout <<"Max Bets " + to_string(players[i]->maxBetLimit) + "\n\n";
       }
-    cout <<"We go outside pS\n";
 }
 
 int checkWinnerAndUpdate(vector<Player*> players)
@@ -181,7 +184,6 @@ int checkWinnerAndUpdate(vector<Player*> players)
       for(int i = 0; i < players.size(); i++)
       {
          players[currWinner]->points += players[i]->currentBetAmount;
-         //players[i]->dollars -= players[i]->currentBetAmount;
       }
     
    return currWinner;
